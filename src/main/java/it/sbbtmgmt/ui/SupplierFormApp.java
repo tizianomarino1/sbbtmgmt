@@ -87,7 +87,7 @@ public class SupplierFormApp {
         JLabel specificationVersionLabel = new JLabel("Versione specifiche:");
         JComboBox<String> specificationVersionCombo = new JComboBox<>(new String[]{"MAIN", "APPROVED_01"});
 
-        JButton saveButton = new JButton("Conferma");
+        JButton saveButton = new JButton("Registra");
         saveButton.addActionListener(event -> {
             String componentName = componentNameField.getText().trim();
             String componentDescription = componentDescriptionField.getText().trim();
