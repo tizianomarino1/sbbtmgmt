@@ -29,7 +29,11 @@ import java.awt.event.FocusEvent;
 
 public class SupplierFormApp {
 
+    private static final String APPLICATION_NAME = "SBBT Manager";
+
     public static void main(String[] args) {
+        System.setProperty("apple.awt.application.name", APPLICATION_NAME);
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name", APPLICATION_NAME);
         SwingUtilities.invokeLater(SupplierFormApp::createAndShowGui);
     }
 
