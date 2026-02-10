@@ -5,7 +5,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -14,14 +13,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -39,8 +38,7 @@ public class SupplierFormApp {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setJMenuBar(createMenuBar(frame));
         frame.setContentPane(createMainPanel());
-        frame.setPreferredSize(new Dimension(1200, 700));
-        frame.pack();
+        frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
@@ -61,33 +59,47 @@ public class SupplierFormApp {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 
-        JList<String> testExecutionList = new JList<>(new String[]{
-                "Smoke - Comune Alfa",
-                "Regression - Comune Beta",
-                "Interoperabilità - Ente Terzo",
-                "Validazione endpoint FO/BO",
-                "Esito import pratiche"
+        JTable componentsTable = new JTable(new DefaultTableModel(
+                new Object[][]{
+                        {"SUAP", "FO", "Componente FO"},
+                        {"SUAP", "BO", "Componente BO"},
+                        {"SUE", "ET", "Gateway ET"},
+                        {"SUAP", "CU", "Connettore CU"},
+                        {"SUE", "RI", "Adapter RI"}
+                },
+                new Object[]{"Contesto", "Tipologia", "Nome"}
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         });
-        testExecutionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        JList<String> componentsList = new JList<>(new String[]{
-                "Componente FO",
-                "Componente BO",
-                "Gateway ET",
-                "Connettore CU",
-                "Adapter RI"
+        JTable testExecutionTable = new JTable(new DefaultTableModel(
+                new Object[][]{
+                        {"a3f3dc7a-6ea3-4f86-bdf9-56be8fdc9152", "COMPLETATO"},
+                        {"94857ed0-9ea7-4f44-b39e-6ef6e8b03db3", "IN CORSO"},
+                        {"f6ac1fc1-64d0-48d8-9db8-57d9f8eb1e35", "ERRORE"},
+                        {"4c72dfce-981f-44ef-ad2a-cb8f1c5ebdb4", "IN ATTESA"},
+                        {"8d91d106-5ef1-4bf8-bf37-afb43a8322ef", "COMPLETATO"}
+                },
+                new Object[]{"Uuid", "Stato di esecuzione"}
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         });
-        componentsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        JScrollPane testExecutionScrollPane = new JScrollPane(testExecutionList);
-        testExecutionScrollPane.setBorder(new TitledBorder("Test execution"));
-
-        JScrollPane componentsScrollPane = new JScrollPane(componentsList);
+        JScrollPane componentsScrollPane = new JScrollPane(componentsTable);
         componentsScrollPane.setBorder(new TitledBorder("Componenti"));
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, testExecutionScrollPane, componentsScrollPane);
-        splitPane.setResizeWeight(0.7);
-        splitPane.setDividerLocation(0.7);
+        JScrollPane testExecutionScrollPane = new JScrollPane(testExecutionTable);
+        testExecutionScrollPane.setBorder(new TitledBorder("Esecuzione test"));
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, componentsScrollPane, testExecutionScrollPane);
+        splitPane.setResizeWeight(0.3);
+        splitPane.setDividerLocation(0.3);
 
         panel.add(splitPane, BorderLayout.CENTER);
         return panel;
