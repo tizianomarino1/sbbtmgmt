@@ -288,32 +288,66 @@ public class SupplierFormApp {
         sbbtSettingsGbc.fill = GridBagConstraints.HORIZONTAL;
         sbbtSettingsPanel.add(specificationVersionCombo, sbbtSettingsGbc);
 
+        JPanel leftColumnPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints leftGbc = new GridBagConstraints();
+        leftGbc.insets = new Insets(6, 6, 6, 6);
+        leftGbc.anchor = GridBagConstraints.NORTHWEST;
+        leftGbc.fill = GridBagConstraints.HORIZONTAL;
+        leftGbc.weightx = 1.0;
+
+        leftGbc.gridx = 0;
+        leftGbc.gridy = 0;
+        leftColumnPanel.add(componentPanel, leftGbc);
+
+        leftGbc.gridy = 1;
+        leftColumnPanel.add(supplierPanel, leftGbc);
+
+        leftGbc.gridy = 2;
+        leftColumnPanel.add(reportPanel, leftGbc);
+
+        leftGbc.gridy = 3;
+        leftGbc.weighty = 1.0;
+        leftColumnPanel.add(new JPanel(), leftGbc);
+
+        JPanel rightColumnPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints rightGbc = new GridBagConstraints();
+        rightGbc.insets = new Insets(6, 6, 6, 6);
+        rightGbc.anchor = GridBagConstraints.NORTHWEST;
+        rightGbc.fill = GridBagConstraints.HORIZONTAL;
+        rightGbc.weightx = 1.0;
+
+        rightGbc.gridx = 0;
+        rightGbc.gridy = 0;
+        rightColumnPanel.add(endpointPanel, rightGbc);
+
+        rightGbc.gridy = 1;
+        rightColumnPanel.add(sbbtSettingsPanel, rightGbc);
+
+        rightGbc.gridy = 2;
+        rightGbc.weighty = 1.0;
+        rightColumnPanel.add(new JPanel(), rightGbc);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(6, 6, 6, 6);
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panel.add(componentPanel, gbc);
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        panel.add(leftColumnPanel, gbc);
 
+        gbc.gridx = 1;
+        panel.add(rightColumnPanel, gbc);
+
+        gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(supplierPanel, gbc);
-
-        gbc.gridy = 2;
-        panel.add(endpointPanel, gbc);
-
-        gbc.gridy = 3;
-        panel.add(reportPanel, gbc);
-
-        gbc.gridy = 4;
-        panel.add(sbbtSettingsPanel, gbc);
-
-        gbc.gridy = 5;
+        gbc.gridwidth = 2;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 0;
         panel.add(saveButton, gbc);
 
         return panel;
