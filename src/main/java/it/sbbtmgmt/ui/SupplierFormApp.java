@@ -2,6 +2,7 @@ package it.sbbtmgmt.ui;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -42,6 +43,14 @@ public class SupplierFormApp {
         JLabel componentDescriptionLabel = new JLabel("Descrizione:");
         JTextField componentDescriptionField = new JTextField(24);
 
+        JLabel componentTypeLabel = new JLabel("Tipologia:");
+        JComboBox<String> componentTypeCombo = new JComboBox<>(new String[]{
+                "FO (FrontOffice)",
+                "BO (BackOffice)",
+                "FOBO (Architettura integrata)",
+                "ET (Ente Terzo)"
+        });
+
         JLabel supplierLabel = new JLabel("Nome fornitore:");
         JTextField supplierField = new JTextField(24);
 
@@ -66,10 +75,23 @@ public class SupplierFormApp {
         JLabel endpointEtToBoLabel = new JLabel("Endpoint ET to BO:");
         JTextField endpointEtToBoField = createPlaceholderField(24, "www.suap.it/et-to-bo");
 
+        JLabel emailTypeLabel = new JLabel("Tipo email:");
+        JComboBox<String> emailTypeCombo = new JComboBox<>(new String[]{"PEC", "MAIL"});
+
+        JLabel emailLabel = new JLabel("Email:");
+        JTextField emailField = createPlaceholderField(24, "example@acme.it");
+
+        JLabel contextLabel = new JLabel("Contesto:");
+        JComboBox<String> contextCombo = new JComboBox<>(new String[]{"SUAP", "SUE"});
+
+        JLabel specificationVersionLabel = new JLabel("Versione specifiche:");
+        JComboBox<String> specificationVersionCombo = new JComboBox<>(new String[]{"MAIN", "APPROVED_01"});
+
         JButton saveButton = new JButton("Conferma");
         saveButton.addActionListener(event -> {
             String componentName = componentNameField.getText().trim();
             String componentDescription = componentDescriptionField.getText().trim();
+            String componentType = (String) componentTypeCombo.getSelectedItem();
             String supplierName = supplierField.getText().trim();
             String vatNumber = vatField.getText().trim();
             String endpointFoToBo = getFieldValue(endpointFoToBoField, "www.suap.it/fo-to-bo");
@@ -78,9 +100,14 @@ public class SupplierFormApp {
             String endpointBoToRi = getFieldValue(endpointBoToRiField, "www.suap.it/bo-to-ri");
             String endpointBoToEt = getFieldValue(endpointBoToEtField, "www.suap.it/bo-to-et");
             String endpointEtToBo = getFieldValue(endpointEtToBoField, "www.suap.it/et-to-bo");
+            String emailType = (String) emailTypeCombo.getSelectedItem();
+            String email = getFieldValue(emailField, "example@acme.it");
+            String context = (String) contextCombo.getSelectedItem();
+            String specificationVersion = (String) specificationVersionCombo.getSelectedItem();
 
             String message = "Nome: " + componentName
                     + "\nDescrizione: " + componentDescription
+                    + "\nTipologia: " + componentType
                     + "\nNome fornitore: " + supplierName
                     + "\nPartita IVA: " + vatNumber
                     + "\nEndpoint FO to BO: " + endpointFoToBo
@@ -88,7 +115,11 @@ public class SupplierFormApp {
                     + "\nEndpoint FO to CU: " + endpointFoToCu
                     + "\nEndpoint BO to RI: " + endpointBoToRi
                     + "\nEndpoint BO to ET: " + endpointBoToEt
-                    + "\nEndpoint ET to BO: " + endpointEtToBo;
+                    + "\nEndpoint ET to BO: " + endpointEtToBo
+                    + "\nTipo email: " + emailType
+                    + "\nEmail: " + email
+                    + "\nContesto: " + context
+                    + "\nVersione specifiche: " + specificationVersion;
             JOptionPane.showMessageDialog(panel, message, "Dati inseriti", JOptionPane.INFORMATION_MESSAGE);
         });
 
@@ -115,6 +146,15 @@ public class SupplierFormApp {
         componentGbc.gridx = 1;
         componentGbc.fill = GridBagConstraints.HORIZONTAL;
         componentPanel.add(componentDescriptionField, componentGbc);
+
+        componentGbc.gridx = 0;
+        componentGbc.gridy = 2;
+        componentGbc.fill = GridBagConstraints.NONE;
+        componentPanel.add(componentTypeLabel, componentGbc);
+
+        componentGbc.gridx = 1;
+        componentGbc.fill = GridBagConstraints.HORIZONTAL;
+        componentPanel.add(componentTypeCombo, componentGbc);
 
         JPanel supplierPanel = new JPanel(new GridBagLayout());
         supplierPanel.setBorder(new TitledBorder("Fornitore"));
@@ -200,6 +240,54 @@ public class SupplierFormApp {
         endpointGbc.fill = GridBagConstraints.HORIZONTAL;
         endpointPanel.add(endpointEtToBoField, endpointGbc);
 
+        JPanel reportPanel = new JPanel(new GridBagLayout());
+        reportPanel.setBorder(new TitledBorder("Report"));
+
+        GridBagConstraints reportGbc = new GridBagConstraints();
+        reportGbc.insets = new Insets(6, 6, 6, 6);
+        reportGbc.anchor = GridBagConstraints.WEST;
+
+        reportGbc.gridx = 0;
+        reportGbc.gridy = 0;
+        reportPanel.add(emailTypeLabel, reportGbc);
+
+        reportGbc.gridx = 1;
+        reportGbc.fill = GridBagConstraints.HORIZONTAL;
+        reportPanel.add(emailTypeCombo, reportGbc);
+
+        reportGbc.gridx = 0;
+        reportGbc.gridy = 1;
+        reportGbc.fill = GridBagConstraints.NONE;
+        reportPanel.add(emailLabel, reportGbc);
+
+        reportGbc.gridx = 1;
+        reportGbc.fill = GridBagConstraints.HORIZONTAL;
+        reportPanel.add(emailField, reportGbc);
+
+        JPanel sbbtSettingsPanel = new JPanel(new GridBagLayout());
+        sbbtSettingsPanel.setBorder(new TitledBorder("Impostazioni SBBT"));
+
+        GridBagConstraints sbbtSettingsGbc = new GridBagConstraints();
+        sbbtSettingsGbc.insets = new Insets(6, 6, 6, 6);
+        sbbtSettingsGbc.anchor = GridBagConstraints.WEST;
+
+        sbbtSettingsGbc.gridx = 0;
+        sbbtSettingsGbc.gridy = 0;
+        sbbtSettingsPanel.add(contextLabel, sbbtSettingsGbc);
+
+        sbbtSettingsGbc.gridx = 1;
+        sbbtSettingsGbc.fill = GridBagConstraints.HORIZONTAL;
+        sbbtSettingsPanel.add(contextCombo, sbbtSettingsGbc);
+
+        sbbtSettingsGbc.gridx = 0;
+        sbbtSettingsGbc.gridy = 1;
+        sbbtSettingsGbc.fill = GridBagConstraints.NONE;
+        sbbtSettingsPanel.add(specificationVersionLabel, sbbtSettingsGbc);
+
+        sbbtSettingsGbc.gridx = 1;
+        sbbtSettingsGbc.fill = GridBagConstraints.HORIZONTAL;
+        sbbtSettingsPanel.add(specificationVersionCombo, sbbtSettingsGbc);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(6, 6, 6, 6);
         gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -217,6 +305,12 @@ public class SupplierFormApp {
         panel.add(endpointPanel, gbc);
 
         gbc.gridy = 3;
+        panel.add(reportPanel, gbc);
+
+        gbc.gridy = 4;
+        panel.add(sbbtSettingsPanel, gbc);
+
+        gbc.gridy = 5;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
