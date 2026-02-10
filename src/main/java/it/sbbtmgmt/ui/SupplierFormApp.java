@@ -3,15 +3,25 @@ package it.sbbtmgmt.ui;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -25,15 +35,74 @@ public class SupplierFormApp {
     }
 
     private static void createAndShowGui() {
-        JFrame frame = new JFrame("Nuova componente");
+        JFrame frame = new JFrame("SBBT Management");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setContentPane(createFormPanel());
+        frame.setJMenuBar(createMenuBar(frame));
+        frame.setContentPane(createMainPanel());
+        frame.setPreferredSize(new Dimension(1200, 700));
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private static JPanel createFormPanel() {
+    private static JMenuBar createMenuBar(JFrame parentFrame) {
+        JMenuBar menuBar = new JMenuBar();
+
+        JMenu componentMenu = new JMenu("Componenti");
+        JMenuItem newComponentItem = new JMenuItem("Nuova componente");
+        newComponentItem.addActionListener(event -> openNewComponentDialog(parentFrame));
+        componentMenu.add(newComponentItem);
+
+        menuBar.add(componentMenu);
+        return menuBar;
+    }
+
+    private static JPanel createMainPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+
+        JList<String> testExecutionList = new JList<>(new String[]{
+                "Smoke - Comune Alfa",
+                "Regression - Comune Beta",
+                "Interoperabilità - Ente Terzo",
+                "Validazione endpoint FO/BO",
+                "Esito import pratiche"
+        });
+        testExecutionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JList<String> componentsList = new JList<>(new String[]{
+                "Componente FO",
+                "Componente BO",
+                "Gateway ET",
+                "Connettore CU",
+                "Adapter RI"
+        });
+        componentsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JScrollPane testExecutionScrollPane = new JScrollPane(testExecutionList);
+        testExecutionScrollPane.setBorder(new TitledBorder("Test execution"));
+
+        JScrollPane componentsScrollPane = new JScrollPane(componentsList);
+        componentsScrollPane.setBorder(new TitledBorder("Componenti"));
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, testExecutionScrollPane, componentsScrollPane);
+        splitPane.setResizeWeight(0.7);
+        splitPane.setDividerLocation(0.7);
+
+        panel.add(splitPane, BorderLayout.CENTER);
+        return panel;
+    }
+
+    private static void openNewComponentDialog(JFrame parentFrame) {
+        JDialog dialog = new JDialog(parentFrame, "Nuova componente", true);
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dialog.setContentPane(createFormPanel(dialog));
+        dialog.pack();
+        dialog.setLocationRelativeTo(parentFrame);
+        dialog.setVisible(true);
+    }
+
+    private static JPanel createFormPanel(JDialog parentDialog) {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 
@@ -121,6 +190,7 @@ public class SupplierFormApp {
                     + "\nContesto: " + context
                     + "\nVersione specifiche: " + specificationVersion;
             JOptionPane.showMessageDialog(panel, message, "Dati inseriti", JOptionPane.INFORMATION_MESSAGE);
+            parentDialog.dispose();
         });
 
         JPanel componentPanel = new JPanel(new GridBagLayout());
