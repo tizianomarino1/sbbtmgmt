@@ -1,8 +1,8 @@
-# sbbtmgmt
+# Manager SBBT
 
-Manager per suite di black box test di InfoCamere.
+Manager per suite di black box test di InfoCamere per collaudo ed accreditamento MIMIT delle componenti SSU (SUAP/SUE).
 
-## Avvio progetto Swing con Maven
+## Swing
 
 Prerequisiti:
 - Temurin JDK 25 installato
@@ -14,7 +14,3 @@ Comandi utili:
 mvn clean compile
 mvn exec:java
 ```
-
-L'applicazione apre una finestra Swing con due campi:
-- nome fornitore
-- partita IVA
